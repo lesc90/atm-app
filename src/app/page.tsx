@@ -9,7 +9,7 @@ export default function Home() {
   const router = useRouter();
   const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget);
     const pin = formData.get('pin')?.toString() || '';
@@ -18,15 +18,18 @@ export default function Home() {
       setError('PIN must only include numbers.')
       return
     }
-    // update to make API call
-    const isValidPin = true;
-    if (isValidPin) {
-      login()
+    const res = await fetch('api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ pin })
+    })
+    const data = await res.json();
+
+    if (res.ok) {
+      login({ accountId: data.accountId, name: data.name, balance: data.balance });
       router.push('/member/welcome')
     }
-
     setError('')
-    console.log('Submitting PIN:', pin)
   }
 
   return (

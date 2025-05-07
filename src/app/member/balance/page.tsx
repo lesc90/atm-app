@@ -1,26 +1,28 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import { useAuth } from '@/context/AuthContext';
 
 export default function Balance() {
-  const [balance, setBalance] = useState<string | null>(null)
+  const [balance, setBalance] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
+    console.log('user', user)
     async function fetchData() {
       try {
-        // update to get PIN from auth context
-        const response = await fetch('/api/balance/1234');
+        const response = await fetch(`/api/balance/${user?.accountId}`);
         if (!response.ok) {
           throw new Error(`Status: ${response.status}`);
         }
         const data = await response.json();
-        setBalance(data.balance);
+        setBalance(data.user.balance);
       } catch (e) {
-        console.log('error fetching balance', e);
+        console.log('Error fetching balance', e);
       }
     }
     fetchData();
-  }, []);
+  }, [user]);
 
 
   return (
