@@ -1,6 +1,8 @@
 'use client'
 import { useState } from "react"
 import { useAuth } from '@/context/AuthContext';
+import Button from "./Button";
+import Input from "./Input";
 
 type ManageFundsFormProps = {
   action: 'deposit' | 'withdraw';
@@ -17,6 +19,10 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
     const accountId = user?.accountId;
     const amountStr = new FormData(form).get('amount')?.toString();
     const amount = amountStr ? parseFloat(amountStr) : 0;
+
+    if (action === 'withdraw') {
+      // TODO: add daily withdrawal limit
+    }
 
     const res = await fetch(`/api/balance/${accountId}`, {
       method: 'POST',
@@ -35,9 +41,9 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
   return (
     <>
       <h1>{displayAction} funds</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col">
         <label htmlFor="amount"></label>
-        <input
+        <Input
           type="number"
           id="amount"
           name="amount"
@@ -45,9 +51,9 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
           step="0.01"
           required
           className="border-1 border-solid rounded-sm" />
-        <button type="submit">{displayAction}</button>
+        <Button variant="primary">{displayAction}</Button>
       </form>
-      <p>Account Balance: {currentBalance || user?.balance}</p>
+      <p className="mt-3">Account Balance: ${currentBalance || user?.balance}</p>
     </>
   );
 }

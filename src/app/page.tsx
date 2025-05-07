@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
 
 export default function Home() {
   const [error, setError] = useState('');
@@ -27,29 +29,28 @@ export default function Home() {
     if (res.ok) {
       login({ accountId: data.accountId, name: data.name, balance: data.balance });
       router.push('/member')
+      setError('')
+    } else {
+      setError(data.error || 'Login failed. Please try again.');
     }
-    setError('')
   }
 
   return (
-    <div className="login">
+    <div className="login max-w-lg mx-auto mt-5 p-3">
       <h1>Welcome</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col">
         <label htmlFor="pin">
           Enter PIN
         </label>
-        <input
+        <Input
           name="pin"
           id="pin"
           type="password"
           inputMode="numeric"
           maxLength={4}
-          className="border-1 border-solid rounded-sm"
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button type="submit" className="cursor-pointer">
-          Submit
-        </button>
+        <Button variant="primary" className="mt-2">Submit</Button>
       </form>
     </div>
   );

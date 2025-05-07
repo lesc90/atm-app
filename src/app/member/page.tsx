@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { BalanceView } from '@/components/BalanceView';
 import { ManageFundsForm } from '@/components/ManageFundsForm';
 import { useRouter } from 'next/navigation';
+import Button from '@/components/Button';
 
 export default function Welcome() {
   const router = useRouter();
@@ -11,14 +12,14 @@ export default function Welcome() {
   const [view, setView] = useState<'balance' | 'deposit' | 'withdraw' | null>(null);
 
   return (
-    <>
+    <div className="max-w-lg mx-auto mt-5 p-3">
       <h1>Welcome {user?.name}</h1>
 
-      <nav className="flex gap-4">
-        <button onClick={() => setView('balance')}>View Balance</button>
-        <button onClick={() => setView('deposit')}>Deposit Funds</button>
-        <button onClick={() => setView('withdraw')}>Withdraw Funds</button>
-        <button onClick={() => router.push('/')}>Log Out</button>
+      <nav className="flex gap-2">
+        <Button onClick={() => setView('balance')} variant="secondary">View Balance</Button>
+        <Button onClick={() => setView('deposit')} variant="secondary">Deposit Funds</Button>
+        <Button onClick={() => setView('withdraw')} variant="secondary">Withdraw Funds</Button>
+        <Button onClick={() => router.push('/')} variant="secondary">Log Out</Button>
       </nav>
 
       <div className="mt-4">
@@ -26,6 +27,6 @@ export default function Welcome() {
         {view === 'deposit' && <ManageFundsForm action="deposit" />}
         {view === 'withdraw' && <ManageFundsForm action="withdraw" />}
       </div>
-    </>
+    </div>
   );
 }
