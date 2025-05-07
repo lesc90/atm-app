@@ -1,7 +1,8 @@
+import { promises as fs } from 'fs';
+import path from 'path';
 export const dynamic = 'force-static'
 
 export async function GET(req: Request, { params }: { params: { accountId: string } }) {
-  console.log('in GET Req')
   const { accountId } = await params;
   if (!accountId) {
     return new Response(JSON.stringify({ error: 'Account ID is required' }), { status: 400 });
@@ -30,32 +31,34 @@ export async function POST(req: Request, { params }: { params: { accountId: stri
   }
 
   try {
-    const { amount, type } = await req.json();
-    if (typeof amount !== 'number' || !['deposit', 'withdrawal'].includes(type)) {
+    const { amount, action } = await req.json();
+    if (typeof amount !== 'number' || !['deposit', 'withdraw'].includes(action)) {
       return Response.json({ error: 'Invalid request body' }, { status: 400 });
     }
 
-    const res = await fetch('http://localhost:3000/data.json');
-    const data = await res.json();
+    const filePath = path.join(process.cwd(), 'public', 'data.json');
+    const fileContents = await fs.readFile(filePath, 'utf-8');
+    const data = JSON.parse(fileContents);
 
-    const entry = data.find((entry: { accountId: string }) => entry.accountId === accountId);
+    const entryIndex = data.findIndex((entry: { accountId: string }) => entry.accountId === accountId);
 
-    if (!entry) {
+    if (entryIndex === -1) {
       return Response.json({ error: 'Account not found' }, { status: 404 });
     }
 
-    if (type === 'withdrawal' && entry.balance < amount) {
+    const entry = data[entryIndex];
+
+    if (action === 'withdraw' && entry.balance < amount) {
       return Response.json({ error: 'Insufficient funds' }, { status: 400 });
     }
 
-    const updatedBalance = type === 'deposit'
+    entry.balance = action === 'deposit'
       ? entry.balance + amount
       : entry.balance - amount;
 
-    // Simulated update (not persisted) -- update to fs write
-    entry.balance = updatedBalance;
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 
-    return Response.json({ balance: updatedBalance });
+    return Response.json({ balance: entry.balance });
   } catch (err) {
     console.error(err);
     return Response.json({ error: 'Something went wrong' }, { status: 500 });

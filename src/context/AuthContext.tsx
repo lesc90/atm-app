@@ -7,6 +7,7 @@ type AuthContextType = {
   login: (userData: User) => void
   logout: () => void
   user: User | null
+  updateUser: (newData: Partial<User>) => void
 }
 
 type User = {
@@ -19,8 +20,8 @@ type User = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthed, setIsAuthed] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   const login = (userData: User) => {
     setUser(userData);
@@ -29,8 +30,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => setIsAuthed(false);
 
+  const updateUser = (newData: Partial<User>) => {
+    setUser(prev => prev ? { ...prev, ...newData } : prev);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthed, login, logout, user }}>
+    <AuthContext.Provider value={{ isAuthed, login, logout, user, updateUser}}>
       {children}
     </AuthContext.Provider>
   )
