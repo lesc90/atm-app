@@ -2,8 +2,6 @@ import { promises as fs } from 'fs';
 import path from 'path';
 export const dynamic = 'force-static'
 
-//TODO: add tests
-
 export async function GET(req: Request, { params }: { params: { accountId: string } }) {
   const { accountId } = await params;
   if (!accountId) {
