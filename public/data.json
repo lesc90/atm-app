@@ -3,12 +3,12 @@
     "pin": "1234",
     "accountId": "abc123",
     "name": "Sam",
-    "balance": 3977
+    "balance": 4175.40
   },
   {
     "pin": "1111",
     "accountId": "abc456",
     "name": "Lee",
-    "balance": 20000
+    "balance": 20013.50
   }
 ]

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useAuth } from '@/context/AuthContext';
 import Button from "./Button";
 import Input from "./Input";
+import { formatCurrency } from "@/utils/formatCurrency";
 
 type ManageFundsFormProps = {
   action: 'deposit' | 'withdraw';
@@ -10,11 +11,13 @@ type ManageFundsFormProps = {
 
 const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
   const [currentBalance, setCurrentBalance] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { user, updateUser } = useAuth();
   const displayAction = action.charAt(0).toUpperCase() + action.slice(1);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const form = e.currentTarget
     const accountId = user?.accountId;
     const amountStr = new FormData(form).get('amount')?.toString();
@@ -36,11 +39,12 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
     setCurrentBalance(data.balance);
     updateUser({ balance: data.balance });
     form.reset()
+    setIsLoading(false);
   }
 
   return (
     <>
-      <h1>{displayAction} funds</h1>
+      <h2>{displayAction} funds</h2>
       <form onSubmit={handleSubmit} className="flex flex-col">
         <label htmlFor="amount"></label>
         <Input
@@ -51,9 +55,15 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
           step="0.01"
           required
           className="border-1 border-solid rounded-sm" />
-        <Button variant="primary">{displayAction}</Button>
+        <Button variant="primary" disabled={isLoading}>{isLoading ? 'Loading...' : displayAction}</Button>
       </form>
-      <p className="mt-3">Account Balance: ${currentBalance || user?.balance}</p>
+      <p className="mt-3">
+        Account Balance:{` `}
+        { currentBalance !== null
+            ? formatCurrency(currentBalance)
+            : formatCurrency(user?.balance ?? 0)
+        }
+      </p>
     </>
   );
 }

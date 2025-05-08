@@ -7,11 +7,13 @@ import Input from "@/components/Input";
 
 export default function Home() {
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     const pin = formData.get('pin')?.toString() || '';
     const pinValidation = /^\d+$/
@@ -50,7 +52,9 @@ export default function Home() {
           maxLength={4}
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <Button variant="primary" className="mt-2">Submit</Button>
+        <Button variant="primary" className="mt-2" disabled={isLoading}>
+          {isLoading ? 'Loading...' : 'Submit'}
+        </Button>
       </form>
     </div>
   );

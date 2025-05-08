@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react"
 import { useAuth } from '@/context/AuthContext';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 const BalanceView = () => {
   const [balance, setBalance] = useState<string | null>(null);
@@ -18,7 +19,7 @@ const BalanceView = () => {
 
 
   return (
-    <h2>Account Balance: ${balance}</h2>
+    <h2>Account Balance: {balance ? formatCurrency(balance) : '...'}</h2>
   );
 }
 
