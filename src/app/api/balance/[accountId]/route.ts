@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-export const dynamic = 'force-static'
 
 export async function GET(req: Request, { params }: { params: { accountId: string } }) {
   const { accountId } = await params;
@@ -19,7 +18,7 @@ export async function GET(req: Request, { params }: { params: { accountId: strin
     return Response.json({ user: entry });
   } catch (error) {
     console.error(error);
-    return Response.json({ error: 'Failed to fetch data from file' }, { status: 500 })
+    return Response.json({ error: 'Failed to fetch data from file' }, { status: 500 });
   }
 }
 

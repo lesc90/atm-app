@@ -23,4 +23,4 @@ const BalanceView = () => {
   );
 }
 
-export { BalanceView };
+export default BalanceView;

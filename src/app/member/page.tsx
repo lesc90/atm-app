@@ -1,9 +1,9 @@
 'use client'
 import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
-import { BalanceView } from '@/components/BalanceView';
-import { ManageFundsForm } from '@/components/ManageFundsForm';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+import BalanceView from '@/components/BalanceView';
+import ManageFundsForm from '@/components/ManageFundsForm';
 import Button from '@/components/Button';
 
 export default function Welcome() {

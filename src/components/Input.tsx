@@ -1,18 +1,13 @@
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  variant?: 'primary';
-};
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
-const Button = ({ variant = 'primary', className = '', ...props }: InputProps) => {
-  const base = 'px-2 py-1 rounded font-medium';
-  const variants = {
-    primary: 'border-1 border-solid rounded-sm border-gray-400',
-  };
+const Input = ({ className = '', ...props }: InputProps) => {
+  const base = 'px-2 py-1 rounded font-medium border-1 border-solid rounded-sm border-gray-400';
   return (
     <input
-      className={`${base} ${variants[variant]} ${className}`}
+      className={`${base} ${className}`}
       {...props}
     />
   );
 }
 
-export default Button;
+export default Input;

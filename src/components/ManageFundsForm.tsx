@@ -1,9 +1,9 @@
 'use client'
-import { useState } from "react"
+import { useState } from "react";
 import { useAuth } from '@/context/AuthContext';
+import { formatCurrency } from "@/utils/formatCurrency";
 import Button from "./Button";
 import Input from "./Input";
-import { formatCurrency } from "@/utils/formatCurrency";
 
 type ManageFundsFormProps = {
   action: 'deposit' | 'withdraw';
@@ -12,8 +12,8 @@ type ManageFundsFormProps = {
 const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
   const [currentBalance, setCurrentBalance] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const { user, updateUser } = useAuth();
   const displayAction = action.charAt(0).toUpperCase() + action.slice(1);
 
@@ -26,7 +26,7 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
     setIsLoading(true);
     setError('');
     setSuccessMessage('');
-    const form = e.currentTarget
+    const form = e.currentTarget;
     const accountId = user?.accountId;
     const amountStr = new FormData(form).get('amount')?.toString();
     const amount = amountStr ? parseFloat(amountStr) : 0;
@@ -53,9 +53,9 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
 
     setCurrentBalance(data.balance);
     updateUser({ balance: data.balance });
-    form.reset();
     setSuccessMessage(`${action === 'deposit' ? 'Deposit' : 'Withdrawal'} of ${formatCurrency(amount)} successful`);
     setIsLoading(false);
+    form.reset();
   }
 
   return (
@@ -72,7 +72,7 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
           step="0.01"
           required
           onChange={handleInputChange}
-          className="border-1 border-solid rounded-sm" />
+        />
         <Button variant="primary" disabled={isLoading}>{isLoading ? 'Loading...' : displayAction}</Button>
       </form>
       {error && <p className="text-red-600 text-sm">{error}</p>}
@@ -82,14 +82,10 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
         </p>
       )}
       <p className="mt-3">
-        Account Balance:{` `}
-        { currentBalance !== null
-            ? formatCurrency(currentBalance)
-            : formatCurrency(user?.balance ?? 0)
-        }
+        { `Account Balance: ${formatCurrency((user?.balance ?? 0) || currentBalance)}` }
       </p>
     </>
   );
 }
 
-export { ManageFundsForm };
+export default ManageFundsForm;

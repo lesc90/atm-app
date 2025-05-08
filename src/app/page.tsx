@@ -7,7 +7,7 @@ import Input from "@/components/Input";
 
 export default function Home() {
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { login } = useAuth();
 
@@ -16,11 +16,11 @@ export default function Home() {
     setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     const pin = formData.get('pin')?.toString() || '';
-    const pinValidation = /^\d+$/
+    const pinValidation = /^\d+$/;
     if (!pinValidation.test(pin)) {
-      setError('PIN must only include numbers.')
+      setError('PIN must only include numbers.');
       setIsLoading(false);
-      return
+      return;
     }
     const res = await fetch('api/login', {
       method: 'POST',
