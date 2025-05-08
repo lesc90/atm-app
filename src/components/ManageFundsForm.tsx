@@ -13,12 +13,19 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
   const [currentBalance, setCurrentBalance] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const { user, updateUser } = useAuth();
   const displayAction = action.charAt(0).toUpperCase() + action.slice(1);
+
+  const handleInputChange = () => {
+    setSuccessMessage('');
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
+    setSuccessMessage('');
     const form = e.currentTarget
     const accountId = user?.accountId;
     const amountStr = new FormData(form).get('amount')?.toString();
@@ -46,15 +53,17 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
 
     setCurrentBalance(data.balance);
     updateUser({ balance: data.balance });
-    form.reset()
+    form.reset();
+    setSuccessMessage(`${action === 'deposit' ? 'Deposit' : 'Withdrawal'} of ${formatCurrency(amount)} successful`);
     setIsLoading(false);
   }
 
   return (
     <>
-      <h2>{displayAction} funds</h2>
       <form onSubmit={handleSubmit} className="flex flex-col">
-        <label htmlFor="amount"></label>
+        <label htmlFor="amount" className="mb-1">
+          Amount to {action}
+        </label>
         <Input
           type="number"
           id="amount"
@@ -62,10 +71,16 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
           min="0.01"
           step="0.01"
           required
+          onChange={handleInputChange}
           className="border-1 border-solid rounded-sm" />
         <Button variant="primary" disabled={isLoading}>{isLoading ? 'Loading...' : displayAction}</Button>
       </form>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {error && <p className="text-red-600 text-sm">{error}</p>}
+      {successMessage && (
+        <p className="text-green-700 text-sm mt-2">
+          {successMessage}
+        </p>
+      )}
       <p className="mt-3">
         Account Balance:{` `}
         { currentBalance !== null

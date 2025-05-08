@@ -19,6 +19,7 @@ export default function Home() {
     const pinValidation = /^\d+$/
     if (!pinValidation.test(pin)) {
       setError('PIN must only include numbers.')
+      setIsLoading(false);
       return
     }
     const res = await fetch('api/login', {
@@ -34,6 +35,7 @@ export default function Home() {
       setError('')
     } else {
       setError(data.error || 'Login failed. Please try again.');
+      setIsLoading(false);
     }
   }
 
@@ -51,7 +53,7 @@ export default function Home() {
           inputMode="numeric"
           maxLength={4}
         />
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
         <Button variant="primary" className="mt-2" disabled={isLoading}>
           {isLoading ? 'Loading...' : 'Submit'}
         </Button>
