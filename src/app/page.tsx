@@ -31,8 +31,8 @@ export default function Home() {
 
     if (res.ok) {
       login({ accountId: data.accountId, name: data.name, balance: data.balance });
-      router.push('/member')
-      setError('')
+      router.push('/member');
+      setError('');
     } else {
       setError(data.error || 'Login failed. Please try again.');
       setIsLoading(false);
