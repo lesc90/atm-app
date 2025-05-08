@@ -25,6 +25,7 @@ export async function GET(req: Request, { params }: { params: { accountId: strin
 
 
 export async function POST(req: Request, { params }: { params: { accountId: string } }) {
+  const DAILY_WITHDRAW_LIMIT = 1000;
   const { accountId } = await params;
   if (!accountId) {
     return Response.json({ error: 'Account ID is required' }, { status: 400 });
@@ -50,6 +51,31 @@ export async function POST(req: Request, { params }: { params: { accountId: stri
 
     if (action === 'withdraw' && entry.balance < amount) {
       return Response.json({ error: 'Insufficient funds' }, { status: 400 });
+    }
+
+    if (action === 'withdraw') {
+      const now = new Date();
+      const today = now.toISOString().split('T')[0];
+
+      const todayWithdrawals = entry.withdrawals?.filter((w: { amount: number; timestamp: string }) => {
+        return w.timestamp.startsWith(today);
+      }) || [];
+
+      const totalToday = todayWithdrawals.reduce((sum: number, w: { amount: number; timestamp: string }) => sum + w.amount, 0);
+
+      if (totalToday + amount > DAILY_WITHDRAW_LIMIT) {
+        return Response.json(
+          { error: `Daily withdrawal limit of $${DAILY_WITHDRAW_LIMIT} exceeded` },
+          { status: 400 }
+        );
+      }
+
+      const newWithdrawal = {
+        amount,
+        timestamp: new Date().toISOString()
+      };
+
+      entry.withdrawals = [...todayWithdrawals, newWithdrawal];
     }
 
     entry.balance = action === 'deposit'

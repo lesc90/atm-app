@@ -12,6 +12,7 @@ type ManageFundsFormProps = {
 const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
   const [currentBalance, setCurrentBalance] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('')
   const { user, updateUser } = useAuth();
   const displayAction = action.charAt(0).toUpperCase() + action.slice(1);
 
@@ -23,10 +24,6 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
     const amountStr = new FormData(form).get('amount')?.toString();
     const amount = amountStr ? parseFloat(amountStr) : 0;
 
-    if (action === 'withdraw') {
-      // TODO: add daily withdrawal limit
-    }
-
     const res = await fetch(`/api/balance/${accountId}`, {
       method: 'POST',
       headers: {
@@ -36,6 +33,17 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
     });
 
     const data = await res.json();
+
+    if (!res.ok) {
+      if (data.error?.includes('Daily withdrawal limit')) {
+        setError('You can not withdraw more than $1000 per day');
+      } else {
+        setError(data.error || 'Something went wrong. Please try again.');
+      }
+      setIsLoading(false);
+      return;
+    }
+
     setCurrentBalance(data.balance);
     updateUser({ balance: data.balance });
     form.reset()
@@ -57,6 +65,7 @@ const ManageFundsForm = ({ action }: ManageFundsFormProps) => {
           className="border-1 border-solid rounded-sm" />
         <Button variant="primary" disabled={isLoading}>{isLoading ? 'Loading...' : displayAction}</Button>
       </form>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
       <p className="mt-3">
         Account Balance:{` `}
         { currentBalance !== null

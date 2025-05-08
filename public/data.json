@@ -3,12 +3,28 @@
     "pin": "1234",
     "accountId": "abc123",
     "name": "Sam",
-    "balance": 4175.40
+    "balance": 3375,
+    "withdrawals": [
+      {
+        "amount": 0.4,
+        "timestamp": "2025-05-08T02:10:13.038Z"
+      },
+      {
+        "amount": 900,
+        "timestamp": "2025-05-08T02:10:26.568Z"
+      }
+    ]
   },
   {
     "pin": "1111",
     "accountId": "abc456",
     "name": "Lee",
-    "balance": 20013.50
+    "balance": 20000,
+    "withdrawals": [
+      {
+        "amount": 13.5,
+        "timestamp": "2025-05-08T02:17:46.712Z"
+      }
+    ]
   }
 ]
