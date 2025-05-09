@@ -3,13 +3,15 @@ import path from 'path';
 
 export async function GET(req: Request, { params }: { params: { accountId: string } }) {
   const { accountId } = await params;
+
   if (!accountId) {
     return new Response(JSON.stringify({ error: 'Account ID is required' }), { status: 400 });
   }
 
   try {
-    const res = await fetch('http://localhost:3000/data.json');
-    const data = await res.json();
+    const filePath = path.join(process.cwd(), 'public', 'data.json');
+    const fileContents = await fs.readFile(filePath, 'utf-8');
+    const data = JSON.parse(fileContents);
     const entry = data.find((entry: { accountId: string }) => entry.accountId === accountId);
 
     if (!entry) {

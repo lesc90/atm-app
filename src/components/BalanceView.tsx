@@ -22,7 +22,6 @@ const BalanceView = () => {
     fetchBalance();
   }, [user]);
 
-
   return (
     <h2>Account Balance: {balance ? formatCurrency(balance) : '...'}</h2>
   );

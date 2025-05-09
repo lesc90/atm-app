@@ -1,15 +1,20 @@
 import { GET } from '@/app/api/balance/[accountId]/route';
+import fs from 'fs';
+
+jest.mock('fs', () => ({
+  promises: {
+    readFile: jest.fn(),
+  },
+}));
+
+const mockAccounts = [
+  { accountId: '1234', name: 'Sam', balance: 1000 },
+  { accountId: '5678', name: 'Lee', balance: 500 },
+];
 
 describe('GET /api/balance/[accountId]', () => {
   beforeEach(() => {
-    const mockData = [
-      { accountId: '1234', name: 'Sam', balance: 1000 },
-      { accountId: '5678', name: 'Lee', balance: 500 },
-    ];
-
-    (global.fetch as jest.Mock) = jest.fn().mockResolvedValue({
-      json: async () => mockData,
-    });
+    (fs.promises.readFile as jest.Mock).mockResolvedValue(JSON.stringify(mockAccounts));
   });
 
   it('returns 200 and user balance if account exists', async () => {
