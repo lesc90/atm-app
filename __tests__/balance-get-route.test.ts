@@ -20,6 +20,7 @@ describe('GET /api/balance/[accountId]', () => {
 
   it('returns 200 and user balance if account exists', async () => {
     const req = new NextRequest('http://localhost/api/balance/1234');
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await GET(req, { params: { accountId: '1234' } });
 
     expect(res.status).toBe(200);
@@ -30,6 +31,7 @@ describe('GET /api/balance/[accountId]', () => {
 
   it('returns 404 if account not found', async () => {
     const req = new NextRequest('http://localhost/api/balance/9999');
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await GET(req, { params: { accountId: '9999' } });
 
     expect(res.status).toBe(404);

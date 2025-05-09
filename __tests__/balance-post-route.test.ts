@@ -47,7 +47,7 @@ describe('POST /api/balance/[accountId]', () => {
     });
 
     (req as NextRequest).json = async () => body;
-
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await POST(req, { params: { accountId: '1234abc' } });
     const data = await res.json();
 
@@ -65,7 +65,7 @@ describe('POST /api/balance/[accountId]', () => {
     });
 
     (req as NextRequest).json = async () => body;
-
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await POST(req, { params: { accountId: '5678abc' } });
     const data = await res.json();
 
@@ -82,7 +82,7 @@ describe('POST /api/balance/[accountId]', () => {
     });
 
     (req as NextRequest).json = async () => body;
-
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await POST(req, { params: { accountId: '1234abc' } });
     const data = await res.json();
 
@@ -100,7 +100,7 @@ describe('POST /api/balance/[accountId]', () => {
     });
 
     (req as NextRequest).json = async () => body;
-
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await POST(req, { params: { accountId: '1234abc' } });
     const data = await res.json();
 
@@ -117,7 +117,7 @@ describe('POST /api/balance/[accountId]', () => {
     });
 
     (req as NextRequest).json = async () => body;
-
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await POST(req, { params: { accountId: '9999' } });
     const data = await res.json();
 
@@ -134,7 +134,7 @@ describe('POST /api/balance/[accountId]', () => {
     });
 
     (req as NextRequest).json = async () => body;
-
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await POST(req, { params: { accountId: '1234abc' } });
     const data = await res.json();
 
@@ -151,7 +151,7 @@ describe('POST /api/balance/[accountId]', () => {
     });
 
     (req as NextRequest).json = async () => body;
-
+    // @ts-expect-error - route expects a Promise-wrapped params object
     const res = await POST(req, { params: { accountId: '1234abc' } });
     const data = await res.json();
 
