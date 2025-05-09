@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server';
 import { GET } from '@/app/api/balance/[accountId]/route';
 import fs from 'fs';
 
@@ -18,7 +19,7 @@ describe('GET /api/balance/[accountId]', () => {
   });
 
   it('returns 200 and user balance if account exists', async () => {
-    const req = new Request('http://localhost/api/balance/1234');
+    const req = new NextRequest('http://localhost/api/balance/1234');
     const res = await GET(req, { params: { accountId: '1234' } });
 
     expect(res.status).toBe(200);
@@ -28,7 +29,7 @@ describe('GET /api/balance/[accountId]', () => {
   });
 
   it('returns 404 if account not found', async () => {
-    const req = new Request('http://localhost/api/balance/9999');
+    const req = new NextRequest('http://localhost/api/balance/9999');
     const res = await GET(req, { params: { accountId: '9999' } });
 
     expect(res.status).toBe(404);

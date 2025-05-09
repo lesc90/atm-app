@@ -1,7 +1,8 @@
+import { NextRequest } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-export async function GET(req: Request, { params }: { params: { accountId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { accountId: string } }) {
   const { accountId } = await params;
 
   if (!accountId) {
@@ -25,7 +26,7 @@ export async function GET(req: Request, { params }: { params: { accountId: strin
 }
 
 
-export async function POST(req: Request, { params }: { params: { accountId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { accountId: string } }) {
   const DAILY_WITHDRAW_LIMIT = 1000;
   const { accountId } = await params;
   if (!accountId) {
