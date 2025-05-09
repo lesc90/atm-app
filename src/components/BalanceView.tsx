@@ -9,18 +9,13 @@ const BalanceView = () => {
 
   useEffect(() => {
     async function fetchBalance() {
-      if (!user?.accountId) return;
-
       const res = await fetch(`/api/balance/${user?.accountId}`);
       const data = await res.json();
-      const latestBalance = data.user.balance;
-      setBalance(latestBalance);
-      if (latestBalance !== user.balance) {
-        updateUser({ balance: latestBalance });
-      }
+      setBalance(data.user.balance);
+      updateUser({ balance: data.user.balance });
     }
     fetchBalance();
-  }, [user]);
+  }, [user, updateUser]);
 
 
   return (
