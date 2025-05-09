@@ -1,13 +1,13 @@
 ## Getting Started
 
-To run the ATM app locally:
+To run the app locally:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ## Test Users
 You can log in using any of the following test PINs:
