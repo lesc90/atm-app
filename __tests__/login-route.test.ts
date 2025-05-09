@@ -1,19 +1,23 @@
+import fs from 'fs';
 import { POST } from '@/app/api/login/route';
 
-global.fetch = jest.fn();
+jest.mock('fs', () => ({
+  promises: {
+    readFile: jest.fn(),
+    writeFile: jest.fn(),
+  },
+}));
 
 const mockAccounts = [
   { pin: '1234', accountId: 'abc123', name: 'Sam', balance: 1000 },
   { pin: '5678', accountId: 'xyz456', name: 'Lee', balance: 500 },
 ];
 
-beforeEach(() => {
-  (fetch as jest.Mock).mockResolvedValue({
-    json: async () => mockAccounts,
-  });
-});
-
 describe('POST /api/login', () => {
+  beforeEach(() => {
+    (fs.promises.readFile as jest.Mock).mockResolvedValue(JSON.stringify(mockAccounts));
+  });
+
   it('returns 400 if pin is missing', async () => {
     const req = new Request('http://localhost/api/login', {
       method: 'POST',
